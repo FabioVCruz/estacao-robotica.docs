@@ -71,7 +71,7 @@ Não cobre a lógica interna dos programas do CLP e do robô nem o projeto elét
 
 ## 2. Diagrama estrutural — visão de containers
 
-Fonte: [`diagrams/containers.mmd`](diagrams/containers.mmd)
+Fonte: [`diagrams/containers.mmd`](containers.mmd)
 
 ```mermaid
 flowchart LR
@@ -117,7 +117,7 @@ flowchart LR
 
 ## 3. Diagrama comportamental — ciclo de uma unidade
 
-Fonte: [`diagrams/ciclo-unidade.mmd`](diagrams/ciclo-unidade.mmd)
+Fonte: [`diagrams/ciclo-unidade.mmd`](ciclo-unidade.mmd)
 
 O robô é servidor Modbus: o CLP **escreve** comandos nos registros do robô e **lê por polling** o registro de status.
 
@@ -157,7 +157,7 @@ sequenceDiagram
 
 ### 3.1 Estados de uma posição do bastidor
 
-Fonte: [`diagrams/estados-posicao.mmd`](diagrams/estados-posicao.mmd)
+Fonte: [`diagrams/estados-posicao.mmd`](estados-posicao.mmd)
 
 ```mermaid
 stateDiagram-v2
