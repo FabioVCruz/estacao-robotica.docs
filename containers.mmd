@@ -1,0 +1,37 @@
+flowchart LR
+  op([Operador])
+  gest([Gestão])
+
+  subgraph est["Estação de carregamento"]
+    ein["Esteira de entrada<br/>+ sensor de pega"]
+    clp["CLP<br/>lógica da estação<br/>cliente Modbus · servidor OPC UA · IHM web"]
+    robo["Robô colaborativo<br/>servidor Modbus TCP"]
+    bast["Bastidor de N posições<br/>carregador por posição"]
+    eout["Esteira de saída"]
+    seg["Circuito de segurança<br/>cabeado, independente do software"]
+  end
+
+  subgraph pc["PC da estação"]
+    nav["Navegador<br/>IHM web"]
+    nrc["Node-RED<br/>fluxo coletor"]
+    mq["Mosquitto<br/>broker MQTT"]
+    nrp["Node-RED<br/>fluxo de persistência"]
+    db[("PostgreSQL<br/>+ TimescaleDB")]
+    gr["Grafana<br/>painéis"]
+  end
+
+  ein -->|"presença (E/S digital)"| clp
+  clp -->|"Modbus TCP"| robo
+  robo -->|"pega"| ein
+  robo -->|"insere / retira"| bast
+  robo -->|"deposita"| eout
+  seg -.->|"intertravamento"| robo
+
+  clp -->|"HTTP · IHM web"| nav
+  op -->|"opera"| nav
+  clp -->|"OPC UA"| nrc
+  nrc -->|"MQTT publish"| mq
+  mq -->|"MQTT subscribe"| nrp
+  nrp -->|"SQL insert"| db
+  gr -->|"SQL query"| db
+  gest -->|"HTTP · rede interna"| gr

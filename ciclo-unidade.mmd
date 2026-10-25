@@ -1,0 +1,31 @@
+sequenceDiagram
+  autonumber
+  participant EE as Esteira entrada
+  participant CLP as CLP
+  participant R as Robô
+  participant B as Posição do bastidor
+  participant ES as Esteira saída
+  participant T as Telemetria
+
+  EE->>CLP: Unidade presente no ponto de pega
+  alt Há posição livre
+    CLP->>CLP: Seleciona e reserva posição livre
+    CLP->>R: Escreve comando ABASTECER + nº da posição
+    R->>EE: Pega a unidade
+    R->>B: Insere na posição e conecta o carregador
+    R-->>CLP: Status CONCLUÍDO (lido por polling)
+    CLP->>CLP: Marca posição ocupada e inicia timer de carga
+    CLP-)T: Estado da posição via OPC UA
+  else Bastidor cheio
+    CLP->>CLP: Mantém unidade na entrada e sinaliza na IHM
+  end
+
+  Note over CLP,B: v1: fim de carga por tempo, sem sensor de corrente
+
+  CLP->>CLP: Timer da posição expirado
+  CLP->>R: Escreve comando RETIRAR + nº da posição
+  R->>B: Retira a unidade
+  R->>ES: Deposita na esteira de saída
+  R-->>CLP: Status CONCLUÍDO (lido por polling)
+  CLP->>CLP: Libera a posição
+  CLP-)T: Ciclo concluído via OPC UA

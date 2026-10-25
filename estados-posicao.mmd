@@ -1,0 +1,10 @@
+stateDiagram-v2
+  [*] --> Livre
+  Livre --> Reservada: CLP escolhe a posição
+  Reservada --> Carregando: robô confirma inserção
+  Carregando --> Pronta: timer de carga expirado
+  Pronta --> Retirando: CLP envia RETIRAR
+  Retirando --> Livre: robô confirma retirada
+  Reservada --> Falha: timeout do robô
+  Retirando --> Falha: timeout do robô
+  Falha --> Livre: reconhecimento do operador
